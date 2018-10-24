@@ -10,7 +10,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/', (req: Request, res: Response) => {
-  logger.info(`Request ${req}...`);
+  logger.info(`Request ${req.body}...`);
   res.send('Hello World!');
 });
 export default app;
