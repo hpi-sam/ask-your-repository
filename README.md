@@ -22,4 +22,4 @@ The most important one is `yarn start`. This basically executes everything you c
 If you want to only do one of the above you can use: `yarn build`, `yarn serve`, `yarn test`, `yarn lint`, `yarn flow` respectively.  
 For test and lint the commands `yarn tdd` and `yarn ldd` start a watcher to run them automatically on file change. `yarn build` and `yarn serve` are always running with a watcher.
 
-## [Developer (git) Workflow](https://github.com/hpi-sam/BP2018HG1/wiki/Developer-(git)-Workflow)
+## [Git Workflow](https://github.com/hpi-sam/BP2018HG1/wiki/Git-Workflow)
