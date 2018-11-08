@@ -1,7 +1,6 @@
-// @flow
 import winston from 'winston';
 
-export default winston.createLogger({
+const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   transports: [
@@ -10,3 +9,5 @@ export default winston.createLogger({
     new winston.transports.Console({ format: winston.format.simple() }),
   ],
 });
+
+export default logger;
