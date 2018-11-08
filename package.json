@@ -29,6 +29,7 @@
     "babel-loader": "^8.0.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-flowtype": "^3.0.0",
