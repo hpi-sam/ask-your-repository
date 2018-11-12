@@ -1,3 +1,4 @@
+.env
 .idea
 node_modules
 flow-typed/npm
@@ -6,3 +7,6 @@ yarn-error.log
 .nyc_output
 logs
 dist
+
+uploads
+test_uploads
