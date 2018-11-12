@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "npm-run-all --parallel serve build-watch flow-watch lint-watch ldd",
+    "start": "npm-run-all --parallel serve build-watch flow-watch lint-watch",
     "serve": "nodemon dist/app.js",
     "build": "webpack",
     "build-watch": "yarn build --watch",
@@ -12,11 +12,23 @@
     "flow-watch": "watch 'yarn flow'",
     "lint": "eslint .",
     "lint-watch": "watch 'yarn lint'",
-    "test": "nyc mocha --require @babel/register --require spec/testSetup.js  spec/*.spec.js",
+    "test": "NODE_ENV=test nyc mocha --require @babel/register --require spec/testSetup.js  spec/*.spec.js",
     "tdd": "yarn test --watch"
   },
   "dependencies": {
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "chai-change": "^2.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
+    "faker": "^4.1.0",
+    "mkdirp": "^0.5.1",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
+    "node-cmd": "^3.0.0",
+    "sequelize": "^4.41.1",
+    "uuid": "^3.3.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {

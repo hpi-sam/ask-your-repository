@@ -1,11 +1,16 @@
 // @flow
 import express from 'express';
-import type { $Request as Request, $Response as Response } from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import routes from './routes';
 
 const app = express();
+app.use(morgan('combined'));
+app.use(bodyParser.json());
+app.use(cors());
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
-});
+routes(app);
+
 
 export default app;
