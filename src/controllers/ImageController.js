@@ -6,7 +6,7 @@ export default {
   upload(req: Request, res: Response) {
     res.status(200).send({
       id: uuidv4(),
-      path: `${process.env.FILE_SERVER}/${req.file.path}`,
+      path: `${process.env.FILE_SERVER}/${req.file.filename}`,
     });
   },
   index(req: Request, res: Response) {
