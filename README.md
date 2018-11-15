@@ -1,4 +1,6 @@
 # esra
+Coverage: [![Coverage Status](https://coveralls.io/repos/github/hpi-sam/ask-your-repository-api/badge.svg)](https://coveralls.io/github/hpi-sam/ask-your-repository-api)  Branch-Master:
+[![CircleCI](https://circleci.com/gh/hpi-sam/ask-your-repository-api/tree/master.svg?style=svg)](https://circleci.com/gh/hpi-sam/ask-your-repository-api/tree/master)
 ## Setup
 1. Install YARN: https://yarnpkg.com/lang/en/docs/install/
 2. Clone the repository: `git clone https://github.com/erksch/esra.git`
