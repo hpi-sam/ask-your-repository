@@ -1,13 +1,19 @@
 // @flow
 import uuidv4 from 'uuid/v4';
 import type { $Request as Request, $Response as Response } from 'express';
+import ImageService from '../services/ImageService';
 
 export default {
-  upload(req: Request, res: Response) {
-    res.status(200).send({
-      id: uuidv4(),
-      path: `${process.env.FILE_SERVER}/${req.file.filename}`,
-    });
+  async upload(req: Request, res: Response) {
+    try {
+      const id = uuidv4();
+      const path = `${process.env.FILE_SERVER}/${req.file.filename}`;
+      await ImageService.create(id, '', path);
+      res.status(200).send({ id, path });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ messages: ['ERROR!'] });
+    }
   },
   index(req: Request, res: Response) {
     res.status(200).send({
