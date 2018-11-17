@@ -16,7 +16,10 @@
     "tdd": "yarn test --watch"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/runtime": "^7.1.5",
     "async": "^2.6.1",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "chai-change": "^2.1.2",
     "cors": "^2.8.5",
