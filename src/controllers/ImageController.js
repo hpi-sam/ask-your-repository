@@ -15,14 +15,20 @@ export default {
       res.status(500).send({ messages: ['ERROR!'] });
     }
   },
-  index(req: Request, res: Response) {
-    res.status(200).send({
-      images: [
-        {
-          id: '1',
-          url: 'https://preview.redd.it/6uv0qqwsi5y11.png?width=960&crop=smart&auto=webp&s=191d8414edb4dd089e923eff4c40ac6f56bb8163',
-        },
-      ],
-    });
+  async index(req: Request, res: Response) {
+    try {
+      const searchTerm = req.params.search_term;
+      let response;
+      if (searchTerm === '' || searchTerm === undefined) {
+        response = await ImageService.listAll();
+      } else {
+        response = await ImageService.find(req.params.search_term);
+      }
+      res.status(200).send({
+        images: response.body,
+      });
+    } catch (err) {
+      res.status(500).send({ messages: ['Internal Error'] });
+    }
   },
 };
