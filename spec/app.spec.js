@@ -8,7 +8,7 @@ import app from '../src/app';
 
 describe('app', () => {
   const elija = nock(process.env.ELIJA_URL);
-    const uploadPath: string = process.env.UPLOAD_PATH;
+  const uploadPath: string = process.env.UPLOAD_PATH;
 
   describe('upload', () => {
     beforeEach(() => {
@@ -20,8 +20,8 @@ describe('app', () => {
         .attach('image', 'spec/test.jpg')
         .end((err, res) => {
           expect(res.status).to.equal(200); // 'success' status
-        done();
-      });
+          done();
+        });
     });
 
     it('an image creates an image file in /uploads/', (done) => {
@@ -32,11 +32,12 @@ describe('app', () => {
       }).to.alter(() => fs.readdirSync(uploadPath).length, { by: 1, callback: done });
     });
   });
-    after(() => {
-      fs.readdir(uploadPath, (err, files) => {
-        files.forEach((file) => {
-          fs.unlink(path.join(uploadPath, file));
-        });
+  after(() => {
+    // delete files in uploads directory
+    fs.readdir(uploadPath, (err, files) => {
+      files.forEach((file) => {
+        const filePath = path.join(uploadPath, file);
+        fs.unlinkSync(filePath);
       });
     });
   });

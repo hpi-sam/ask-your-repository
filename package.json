@@ -5,14 +5,14 @@
   "license": "MIT",
   "scripts": {
     "start": "npm-run-all --parallel serve build-watch flow-watch lint-watch",
-    "serve": "nodemon dist/app.js",
+    "serve": "nodemon dist/app.js --trace-warnings",
     "build": "webpack",
     "build-watch": "yarn build --watch",
     "flow": "flow",
     "flow-watch": "watch 'yarn flow'",
     "lint": "eslint .",
     "lint-watch": "watch 'yarn lint'",
-    "test": "NODE_ENV=test nyc mocha --require @babel/register --require spec/testSetup.js  spec/*.spec.js",
+    "test": "NODE_ENV=test nyc mocha --require @babel/register --require spec/testSetup.js  spec/*.spec.js --trace-warnings",
     "tdd": "yarn test --watch"
   },
   "dependencies": {
