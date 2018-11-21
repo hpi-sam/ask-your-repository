@@ -21,13 +21,8 @@ export default {
     });
   },
   update(id, tags) {
-    let tagsString = '';
-    tags.forEach((tag) => {
-      tagsString.append(`${tag}, `);
-    });
-    tagsString = tagsString.substring(0, tagsString.length - 2);
     return elijaApi().put(`/artefacts/image/${id}`, {
-      tags: tagsString,
+      tags,
     });
   },
 };
