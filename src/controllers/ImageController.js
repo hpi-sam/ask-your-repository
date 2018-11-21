@@ -2,17 +2,30 @@
 import uuidv4 from 'uuid/v4';
 import type { $Request as Request, $Response as Response } from 'express';
 import ImageService from '../services/ImageService';
+import logger from '../logger';
 
 export default {
   async upload(req: Request, res: Response) {
+    const id = uuidv4();
+    const path = `${process.env.FILE_SERVER}/${req.file.filename}`;
     try {
-      const id = uuidv4();
-      const path = `${process.env.FILE_SERVER}/${req.file.filename}`;
       await ImageService.create(id, '', path);
       res.status(200).send({ id, path });
     } catch (err) {
-      console.log(err);
-      res.status(500).send({ messages: ['ERROR!'] });
+      logger.error(err);
+      if (err.response !== undefined) {
+        res.status(503).send({
+          messages: ['Database Error!'],
+          elija_response: {
+            status: err.response.status,
+            message: err.response.body,
+          },
+        });
+      } else {
+        res.status(500).send({
+          messages: ['Internal Error!'],
+        });
+      }
     }
   },
   async index(req: Request, res: Response) {
@@ -28,7 +41,20 @@ export default {
         images: response.body,
       });
     } catch (err) {
-      res.status(500).send({ messages: ['Internal Error'] });
+      logger.error(err);
+      if (err.response !== undefined) {
+        res.status(503).send({
+          messages: ['Database Error!'],
+          elija_response: {
+            status: err.response.status,
+            message: err.response.body,
+          },
+        });
+      } else {
+        res.status(500).send({
+          messages: ['Internal Error!'],
+        });
+      }
     }
   },
 };
