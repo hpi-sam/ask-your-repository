@@ -18,7 +18,7 @@ export default {
           messages: ['Database Error!'],
           elija_response: {
             status: err.response.status,
-            message: err.response.body,
+            message: err.response.data,
           },
         });
       } else {
@@ -37,24 +37,23 @@ export default {
       } else {
         response = await ImageService.find(req.params.search_term);
       }
-      res.status(200).send({
-        images: response.body,
+      return res.status(200).send({
+        images: response.data,
       });
     } catch (err) {
       logger.error(err);
       if (err.response !== undefined) {
-        res.status(503).send({
+        return res.status(503).send({
           messages: ['Database Error!'],
           elija_response: {
             status: err.response.status,
-            message: err.response.body,
+            message: err.response.data,
           },
         });
-      } else {
-        res.status(500).send({
-          messages: ['Internal Error!'],
-        });
       }
+      return res.status(500).send({
+        messages: ['Internal Error!'],
+      });
     }
   },
 };
