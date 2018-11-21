@@ -8,7 +8,8 @@ import routes from './routes';
 const app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
+app.options('*', cors());
 
 routes(app);
 
