@@ -10,6 +10,8 @@ export default {
     check('id').custom((id) => {
       if (!validateuuid(id, 4)) {
         throw new Error("uuid doesn't fit definition of uuid version 4");
+      } else {
+        return true;
       }
     },
     check('tags').isArray),
