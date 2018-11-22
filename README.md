@@ -4,7 +4,7 @@ Coverage: [![Coverage Status](https://coveralls.io/repos/github/hpi-sam/ask-your
 ## Setup
 1. Install YARN: https://yarnpkg.com/lang/en/docs/install/
 2. Clone the repository: `git clone https://github.com/hpi-sam/ask-your-repository-api.git`
-3. Change directory into the repository folder: `cd esra`
+3. Change directory into the repository folder: `cd ask-your-repository-api`
 4. Execute `yarn install` to install dependencies
 5. Execute `yarn flow-typed install` to install types for all dependencies
 5. Start developing and Have fun!
