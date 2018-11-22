@@ -3,7 +3,7 @@ Coverage: [![Coverage Status](https://coveralls.io/repos/github/hpi-sam/ask-your
 [![CircleCI](https://circleci.com/gh/hpi-sam/ask-your-repository-api/tree/master.svg?style=svg)](https://circleci.com/gh/hpi-sam/ask-your-repository-api/tree/master)
 ## Setup
 1. Install YARN: https://yarnpkg.com/lang/en/docs/install/
-2. Clone the repository: `git clone https://github.com/erksch/esra.git`
+2. Clone the repository: `git clone https://github.com/hpi-sam/ask-your-repository-api.git`
 3. Change directory into the repository folder: `cd esra`
 4. Execute `yarn install` to install dependencies
 5. Execute `yarn flow-typed install` to install types for all dependencies
