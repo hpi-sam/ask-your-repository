@@ -6,31 +6,31 @@ import logger from '../logger';
 
 export default {
   async add(req: Request, res: Response) {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return res.status(422).send({
+        messages: validationErrors.array().map(error => error.msg),
+        errors: validationErrors.array(),
+      });
+    }
+    const { id } = req.params;
     try {
-      const validationErrors = validationResult(req);
-      if (!validationErrors.isEmpty()) {
-        return res.status(422).send({
-          messages: validationErrors.array().map(error => error.msg),
-          errors: validationErrors.array(),
-        });
-      }
-      const { id } = req.params;
       await ImageService.update(id, req.body.tags);
-      return res.status(200).send({ messages: ['Success!'] });
     } catch (err) {
       logger.error(err);
       if (err.response !== undefined) {
-        return res.status(500).send({
+        return res.status(503).send({
           messages: ['Database Error!'],
           elija_response: {
             status: err.response.status,
-            message: err.response.body,
+            message: err.response.data,
           },
         });
       }
-      return res.status(500).send({
-        messages: ['Internal Error!'],
+      return res.status(503).send({
+        messages: ['Database unavailable!'],
       });
     }
+    return res.status(200).send({ messages: ['Success!'] });
   },
 };
