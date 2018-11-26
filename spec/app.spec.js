@@ -10,17 +10,12 @@ describe('app', () => {
   const elija = nock(process.env.ELIJA_URL);
   const uploadPath: string = process.env.UPLOAD_PATH;
 
-<<<<<<< HEAD
-  describe('upload', () => {
-    beforeEach(() => {
-      elija.post('/artefacts').reply(200);
-    });
-=======
+
   describe('GET /images', () => {
     context('valid request', () => {
       let response;
       beforeEach(async () => {
-        elija.get('/artefacts/image').reply(200, {
+        elija.get('/artefacts').reply(200, {
           results:
         [{
           _id: 'db20072d-38dc-4226-83ff-f204b4366118',
@@ -56,7 +51,6 @@ describe('app', () => {
         });
         response = await request(app).get('/images').set('Accept', 'application/json').send();
       });
->>>>>>> Add tests for error handling. Fix image response format. Ref #10
 
       it('has status 200', (done) => {
         expect(response.status).to.equal(200);
@@ -89,7 +83,7 @@ describe('app', () => {
   describe('POST /Images (upload)', () => {
     context('valid request', () => {
       beforeEach(() => {
-        elija.post('/artefacts/image').reply(200);
+        elija.post('/artefacts').reply(200);
       });
 
       it('has status 200', (done) => {
@@ -129,6 +123,44 @@ describe('app', () => {
           expect(response.status).to.equal(503);
           done();
         });
+      });
+      context('elija throws error', () => {
+        let response;
+        beforeEach(async () => {
+          elija.post('/artefacts').reply(503);
+          response = await request(app).get('/images').set('Accept', 'application/json').send();
+        });
+        it('has status 503', (done) => {
+          expect(response.status).to.equal(503);
+          done();
+        });
+      });
+    });
+  });
+  describe('POST /images/:id/tags', () => {
+    beforeEach(() => {
+      elija.put('/artefacts/db20072d-38dc-4226-83ff-f204b4366118').reply(200);
+    });
+    const sendRequest = id => request(app).post(`/images/${id}/tags`)
+      .set('Accept', 'application/json').send({ tags: ['blub'] });
+    context('valid request', () => {
+      let response;
+      beforeEach(async () => {
+        response = await sendRequest('db20072d-38dc-4226-83ff-f204b4366118');
+      });
+      it('has status 200', (done) => {
+        expect(response.status).to.equal(200);
+        done();
+      });
+    });
+    context('invalid uuid', () => {
+      let response;
+      beforeEach(async () => {
+        response = await sendRequest('invalid ID LUL');
+      });
+      it('has status 422', (done) => {
+        expect(response.status).to.equal(422);
+        done();
       });
     });
   });
