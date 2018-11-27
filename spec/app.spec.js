@@ -12,7 +12,7 @@ describe('app', () => {
 
   describe('upload', () => {
     beforeEach(() => {
-      elija.post('/artefacts/image').reply(200);
+      elija.post('/artefacts').reply(200);
     });
 
     it('an image has status 200', (done) => {
