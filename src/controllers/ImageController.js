@@ -1,8 +1,9 @@
 // @flow
 import uuidv4 from 'uuid/v4';
-import type { $Request as Request, $Response as Response } from 'express';
+import type { $Request as Request, $Response as Response, Middleware } from 'express';
+import Boom from 'boom';
 import ImageService from '../services/ImageService';
-import logger from '../logger';
+import ErrorBuilder from '../errors/ErrorBuilder';
 
 function formatIndex(elijaResponse) {
   return elijaResponse.results.map(image => ({
@@ -12,53 +13,39 @@ function formatIndex(elijaResponse) {
   }));
 }
 
+function isTermEmpty(searchTerm) {
+  return searchTerm === '' || searchTerm === undefined;
+}
+
 export default {
-  async upload(req: Request, res: Response) {
+  async upload(req: Request, res: Response, next: Middleware) {
     const id = uuidv4();
     const path = `${process.env.FILE_SERVER}/${req.file.filename}`;
     try {
       await ImageService.create(id, '', path);
     } catch (err) {
-      logger.error(err);
       if (err.response !== undefined) {
-        res.status(503).send({
-          messages: ['Database Error!'],
-          elija_response: {
-            status: err.response.status,
-            message: err.response.data,
-          },
-        });
-      } else {
-        res.status(503).send({
-          messages: ['Database unavailable!'],
-        });
+        return next(ErrorBuilder.buildElijaError(err));
       }
+      return next(new Boom('Database unavailable', { statusCode: 503 }));
     }
 
-    res.status(200).send({ id, path });
+    return res.status(200).send({ id, path });
   },
-  async index(req: Request, res: Response) {
+  async index(req: Request, res: Response, next: Middleware) {
     const searchTerm = req.params.search_term;
     let response;
     try {
-      if (searchTerm === '' || searchTerm === undefined) {
+      if (isTermEmpty(searchTerm)) {
         response = await ImageService.listAll();
       } else {
-        response = await ImageService.find(req.params.search_term);
+        response = await ImageService.find(searchTerm);
       }
     } catch (err) {
       if (err.response !== undefined) {
-        return res.status(503).send({
-          messages: ['Database Error!'],
-          elija_response: {
-            status: err.response.status,
-            message: err.response.data,
-          },
-        });
+        return next(ErrorBuilder.buildElijaError(err));
       }
-      return res.status(503).send({
-        messages: ['Database unavailable!'],
-      });
+      return next(new Boom('Database unavailable', { statusCode: 503 }));
     }
     return res.status(200).send({
       images: formatIndex(response.data),

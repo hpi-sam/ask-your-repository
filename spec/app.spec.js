@@ -124,10 +124,11 @@ describe('app', () => {
           done();
         });
       });
+
       context('elija throws error', () => {
         let response;
         beforeEach(async () => {
-          elija.post('/artefacts').reply(503);
+          elija.post('/artefacts/image').reply(503);
           response = await request(app).get('/images').set('Accept', 'application/json').send();
         });
         it('has status 503', (done) => {
