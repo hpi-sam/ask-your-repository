@@ -1,17 +1,19 @@
 import elijaApi from './ElijaAPI';
 
 export default {
-  find(searchTerm) {
+  find(searchTerm, offset, limit) {
     return elijaApi().get('/artefacts', {
       search: searchTerm,
+      offset,
+      limit,
     });
   },
   // Usage find("Cookies", {date_range: {
   //      start_date: startDate,
   //     end_date: endDate,
   //   },},);
-  listAll() {
-    return elijaApi().get('/artefacts');
+  listAll(offset, limit) {
+    return elijaApi().get('/artefacts', { offset, limit });
   },
   create(id, tags, fileUrl) {
     return elijaApi().post('/artefacts', {

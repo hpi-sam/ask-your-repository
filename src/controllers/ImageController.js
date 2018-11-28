@@ -9,7 +9,7 @@ function formatIndex(elijaResponse) {
   return elijaResponse.results.map(image => ({
     id: image._id,
     url: image._source.file_url,
-    tags: image._source.tags,
+    tags: image._source.tags || [],
   }));
 }
 
@@ -22,24 +22,23 @@ export default {
     const id = uuidv4();
     const path = `${process.env.FILE_SERVER}/${req.file.filename}`;
     try {
-      await ImageService.create(id, '', path);
+      await ImageService.create(id, [], path);
     } catch (err) {
       if (err.response !== undefined) {
         return next(ErrorBuilder.buildElijaError(err));
       }
       return next(new Boom('Database unavailable', { statusCode: 503 }));
     }
-
     return res.status(200).send({ id, path });
   },
   async index(req: Request, res: Response, next: Middleware) {
-    const searchTerm = req.params.search_term;
+    const { searchTerm, offset, limit } = req.params;
     let response;
     try {
       if (isTermEmpty(searchTerm)) {
-        response = await ImageService.listAll();
+        response = await ImageService.listAll(offset, limit);
       } else {
-        response = await ImageService.find(searchTerm);
+        response = await ImageService.find(searchTerm, offset, limit);
       }
     } catch (err) {
       if (err.response !== undefined) {
