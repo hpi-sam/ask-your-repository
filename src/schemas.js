@@ -4,7 +4,10 @@ import validateuuid from 'uuid-validate';
 // These middleware arrays validate request bodies and params.
 export default {
   postImages: [],
-  getImages: [],
+  getImages: [
+    check('limit').optional().isNumeric().withMessage('must be numeric'),
+    check('offset').optional().isNumeric().withMessage('must be numeric'),
+  ],
   updateImages: [
     check('id').exists(),
     check('id').custom((id) => {

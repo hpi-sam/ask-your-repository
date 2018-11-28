@@ -10,60 +10,122 @@ describe('/images', () => {
   const uploadPath: string = process.env.UPLOAD_PATH;
   describe('GET', () => {
     context('valid request', () => {
-      let response;
-      beforeEach(async () => {
-        elija.get('/artefacts').reply(200, {
-          results:
-        [{
-          _id: 'db20072d-38dc-4226-83ff-f204b4366118',
-          _index: 'artefact',
-          _score: 0.5753642,
-          _source: {
-            created_at: '2018-11-14T12:41:26.754071',
-            file_url: 'class_diagram.png',
-            tags: ['uml', 'class diagram', 'architecture'],
-          },
-          _type: 'image',
-          sort: [
-            0.5753642,
-            1542199286754,
-          ],
-        },
-        {
-          _id: 'db20072d-38dc-4226-83ff-f204b4366118',
-          _index: 'artefact',
-          _score: 0.5753642,
-          _source: {
-            created_at: '2018-11-14T12:41:26.754071',
-            file_url: 'class_diagram.png',
-            tags: ['uml', 'class diagram', 'architecture'],
-          },
-          _type: 'image',
-          sort: [
-            0.5753642,
-            1542199286754,
-          ],
-        },
-        ],
+      describe('query params offset and limit', () => {
+        let response;
+        beforeEach(async () => {
+          elija.get('/artefacts').query({ offset: 48, limit: 22 }).reply(200, {
+            results:
+              [{
+                _id: 'db20072d-38dc-4226-83ff-f204b4366118',
+                _index: 'artefact',
+                _score: 0.5753642,
+                _source: {
+                  created_at: '2018-11-14T12:41:26.754071',
+                  file_url: 'class_diagram.png',
+                  tags: ['uml', 'class diagram', 'architecture'],
+                },
+                _type: 'image',
+                sort: [
+                  0.5753642,
+                  1542199286754,
+                ],
+              },
+              {
+                _id: 'db20072d-38dc-4226-83ff-f204b4366118',
+                _index: 'artefact',
+                _score: 0.5753642,
+                _source: {
+                  created_at: '2018-11-14T12:41:26.754071',
+                  file_url: 'class_diagram.png',
+                  tags: ['uml', 'class diagram', 'architecture'],
+                },
+                _type: 'image',
+                sort: [
+                  0.5753642,
+                  1542199286754,
+                ],
+              },
+              ],
+          });
+          response = await request(app).get('/images')
+            .query({ offset: 48, limit: 22 })
+            .set('Accept', 'application/json')
+            .send();
         });
-        response = await request(app).get('/images').set('Accept', 'application/json').send();
+        it('has status 200', (done) => {
+          expect(response.status).to.equal(200);
+          done();
+        });
       });
 
-      it('has status 200', (done) => {
-        expect(response.status).to.equal(200);
-        done();
-      });
+      describe('default request', () => {
+        let response;
+        beforeEach(async () => {
+          elija.get('/artefacts').query({ offset: 0, limit: 10 }).reply(200, {
+            results:
+              [{
+                _id: 'db20072d-38dc-4226-83ff-f204b4366118',
+                _index: 'artefact',
+                _score: 0.5753642,
+                _source: {
+                  created_at: '2018-11-14T12:41:26.754071',
+                  file_url: 'class_diagram.png',
+                  tags: ['uml', 'class diagram', 'architecture'],
+                },
+                _type: 'image',
+                sort: [
+                  0.5753642,
+                  1542199286754,
+                ],
+              },
+              {
+                _id: 'db20072d-38dc-4226-83ff-f204b4366118',
+                _index: 'artefact',
+                _score: 0.5753642,
+                _source: {
+                  created_at: '2018-11-14T12:41:26.754071',
+                  file_url: 'class_diagram.png',
+                  tags: ['uml', 'class diagram', 'architecture'],
+                },
+                _type: 'image',
+                sort: [
+                  0.5753642,
+                  1542199286754,
+                ],
+              },
+              ],
+          });
+          response = await request(app).get('/images').set('Accept', 'application/json').send();
+        });
+        it('has status 200', (done) => {
+          expect(response.status).to.equal(200);
+          done();
+        });
 
-      it('warps image objects', (done) => {
-        expect(response.body.images.length).to.equal(2);
-        expect(response.body.images[0].url).to.equal('class_diagram.png');
-        expect(response.body.images[0].id).to.equal('db20072d-38dc-4226-83ff-f204b4366118');
-        // Only using eql to check for lose equality, since we don't care about object identity
-        expect(response.body.images[0].tags).to.eql(['uml', 'class diagram', 'architecture']);
-        done();
+        it('warps image objects', (done) => {
+          expect(response.body.images.length).to.equal(2);
+          expect(response.body.images[0].url).to.equal('class_diagram.png');
+          expect(response.body.images[0].id).to.equal('db20072d-38dc-4226-83ff-f204b4366118');
+          // Only using eql to check for lose equality, since we don't care about object identity
+          expect(response.body.images[0].tags).to.eql(['uml', 'class diagram', 'architecture']);
+          done();
+        });
       });
     });
     describe('possible errors', () => {
+      context('faulty paramters', () => {
+        let response;
+        beforeEach(async () => {
+          response = await request(app).get('/images')
+            .query({ offset: 'COOKIES', limit: 'even mOA cookies' })
+            .set('Accept', 'application/json')
+            .send();
+        });
+        it('has status 422', (done) => {
+          expect(response.status).to.equal(422);
+          done();
+        });
+      });
       context('elija not connected', () => {
         let response;
         beforeEach(async () => {

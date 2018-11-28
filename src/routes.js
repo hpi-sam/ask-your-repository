@@ -9,7 +9,7 @@ const routes = (app: Application) => {
   const upload = configureMulter();
 
   app.post('/images', upload.single('image'), ImageController.upload);
-  app.get('/images', ImageController.index);
+  app.get('/images', schemas.getImages, ImageController.index);
   app.post('/images/:id/tags', schemas.updateImages, TagController.add);
 };
 
