@@ -12,7 +12,7 @@
     "flow-watch": "watch 'yarn flow'",
     "lint": "eslint .",
     "lint-watch": "watch 'yarn lint'",
-    "test": "NODE_ENV=test nyc mocha --require @babel/register --require spec/testSetup.js  spec/*.spec.js --trace-warnings",
+    "test": "NODE_ENV=test nyc mocha --recursive --require @babel/register --require spec/testSetup.js  -name '*.spec.js' spec --trace-warnings",
     "tdd": "yarn test --watch"
   },
   "dependencies": {

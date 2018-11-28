@@ -3,15 +3,12 @@ import request from 'supertest';
 import fs from 'fs';
 import path from 'path';
 import nock from 'nock';
-import app from '../src/app';
+import app from '../../src/app';
 
-
-describe('app', () => {
+describe('/images', () => {
   const elija = nock(process.env.ELIJA_URL);
   const uploadPath: string = process.env.UPLOAD_PATH;
-
-
-  describe('GET /images', () => {
+  describe('GET', () => {
     context('valid request', () => {
       let response;
       beforeEach(async () => {
@@ -80,7 +77,7 @@ describe('app', () => {
     });
   });
 
-  describe('POST /Images (upload)', () => {
+  describe('POST (upload)', () => {
     context('valid request', () => {
       beforeEach(() => {
         elija.post('/artefacts').reply(200);
@@ -103,7 +100,7 @@ describe('app', () => {
         }).to.alter(() => fs.readdirSync(uploadPath).length, { by: 1, callback: done });
       });
       after(() => {
-        // delete files in uploads directory
+      // delete files in uploads directory
         fs.readdir(uploadPath, (err, files) => {
           files.forEach((file) => {
             const filePath = path.join(uploadPath, file);
@@ -135,33 +132,6 @@ describe('app', () => {
           expect(response.status).to.equal(503);
           done();
         });
-      });
-    });
-  });
-  describe('POST /images/:id/tags', () => {
-    beforeEach(() => {
-      elija.put('/artefacts/db20072d-38dc-4226-83ff-f204b4366118').reply(200);
-    });
-    const sendRequest = id => request(app).post(`/images/${id}/tags`)
-      .set('Accept', 'application/json').send({ tags: ['blub'] });
-    context('valid request', () => {
-      let response;
-      beforeEach(async () => {
-        response = await sendRequest('db20072d-38dc-4226-83ff-f204b4366118');
-      });
-      it('has status 200', (done) => {
-        expect(response.status).to.equal(200);
-        done();
-      });
-    });
-    context('invalid uuid', () => {
-      let response;
-      beforeEach(async () => {
-        response = await sendRequest('invalid ID LUL');
-      });
-      it('has status 422', (done) => {
-        expect(response.status).to.equal(422);
-        done();
       });
     });
   });
