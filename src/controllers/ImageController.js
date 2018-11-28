@@ -4,6 +4,7 @@ import type { $Request as Request, $Response as Response, Middleware } from 'exp
 import Boom from 'boom';
 import ImageService from '../services/ImageService';
 import ErrorBuilder from '../errors/ErrorBuilder';
+import logger from '../logger';
 
 function formatIndex(elijaResponse) {
   return elijaResponse.results.map(image => ({
@@ -33,7 +34,8 @@ export default {
     return res.status(200).send({ id, path });
   },
   async index(req: Request, res: Response, next: Middleware) {
-    const searchTerm = req.params.search_term;
+    const { searchTerm } = req.query;
+    logger.info(`Search term is: ${searchTerm}`);
     let response;
     try {
       if (isTermEmpty(searchTerm)) {

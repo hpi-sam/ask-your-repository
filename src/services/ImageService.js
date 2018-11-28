@@ -1,9 +1,11 @@
 import elijaApi from './ElijaAPI';
+import logger from '../logger';
 
 export default {
   find(searchTerm) {
+    logger.info(`looking for ${searchTerm}`);
     return elijaApi().get('/artefacts', {
-      search: searchTerm,
+      params: { search: searchTerm },
     });
   },
   // Usage find("Cookies", {date_range: {
@@ -11,6 +13,7 @@ export default {
   //     end_date: endDate,
   //   },},);
   listAll() {
+    logger.info('requesting all artefacts');
     return elijaApi().get('/artefacts');
   },
   create(id, tags, fileUrl) {
